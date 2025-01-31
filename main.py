@@ -10,3 +10,6 @@ conductor1.GMR, conductor1.resistance, conductor1.ampacity)
 bundle1 = Bundle("Bundle 1", 2, 1.5, conductor1)
 print(bundle1.name, bundle1.num_conductors, bundle1.spacing, bundle1.conductor.name)
 
+bundle1.calcradii()
+print(bundle1.DSC, bundle1.DSL)
+
