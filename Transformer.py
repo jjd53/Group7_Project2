@@ -29,3 +29,15 @@ class Transformer:
 
     def calc_admittance(self):
         return 1 / self.zt if self.zt != 0 else float('inf')
+
+
+if __name__ == "__main__":
+
+    bus1 = Bus("Bus 1", 20)
+    bus2 = Bus("Bus 2", 230)
+
+
+    # Transformer validation
+    transformer1 = Transformer("T1", bus1, bus2, 125, 8.5, 10)
+    print(f"Transformer -> Name: {transformer1.name}, Bus1: {transformer1.bus1.name}, Bus2: {transformer1.bus2.name}, Power Rating: {transformer1.power_rating} MVA")
+    print(f"Impedance (zt): {transformer1.zt} ohms, Admittance (yt): {transformer1.yt} siemens")
