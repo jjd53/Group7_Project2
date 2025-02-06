@@ -1,8 +1,7 @@
 # Transformer.py
 from Bus import Bus
 class Transformer:
-    def __init__(self, name: str, bus1: Bus, bus2: Bus, power_rating: float, impedance_percent: float,
-                 x_over_r_ratio: float):
+    def __init__(self, name: str, bus1: Bus, bus2: Bus, power_rating: float, impedance_percent: float, x_over_r_ratio: float):
         self.name = name
         self.bus1 = bus1
         self.bus2 = bus2
@@ -14,10 +13,10 @@ class Transformer:
         self.zt = self.calc_impedance()
         self.rt, self.xt = self.calc_rt_xt()  # Separate resistance and reactance
         self.yt = self.calc_admittance()
-        self.yprim = None  # Placeholder for milestone 3
+        self.yprim = self.calc_yprim()  # Calculate Y-prim matrix
 
     def calc_impedance(self):
-        # Base impedance calculation
+        # Base impedance calculation in ohms
         base_impedance = (self.bus1.base_kv ** 2) / self.power_rating
         return (self.impedance_percent / 100) * base_impedance
 
@@ -30,14 +29,6 @@ class Transformer:
     def calc_admittance(self):
         return 1 / self.zt if self.zt != 0 else float('inf')
 
-
-if __name__ == "__main__":
-
-    bus1 = Bus("Bus 1", 20)
-    bus2 = Bus("Bus 2", 230)
-
-
-    # Transformer validation
-    transformer1 = Transformer("T1", bus1, bus2, 125, 8.5, 10)
-    print(f"Transformer -> Name: {transformer1.name}, Bus1: {transformer1.bus1.name}, Bus2: {transformer1.bus2.name}, Power Rating: {transformer1.power_rating} MVA")
-    print(f"Impedance (zt): {transformer1.zt} ohms, Admittance (yt): {transformer1.yt} siemens")
+    def calc_yprim(self):
+        y_series = 1 / self.zt if self.zt != 0 else complex('inf')
+        return [[y_series, -y_series], [-y_series, y_series]]
