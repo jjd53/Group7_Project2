@@ -5,6 +5,7 @@ class Bundle:
         self.num_conductors: int = num_conductors
         self.spacing: float = spacing
         self.conductor = conductor
+        self.calcradii()
 
     def calcradii(self):
 

@@ -8,7 +8,7 @@ class Geometry:
         self.yb: float = yb
         self.xc: float = xc
         self.yc: float = yc
-
+        self.Deq()
 
     def Deq(self):
 
