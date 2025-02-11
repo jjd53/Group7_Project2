@@ -1,6 +1,5 @@
 from Circuit import Circuit
 
-
 network = Circuit("network")
 
 network.add_bus("bus1", 20)
