@@ -15,7 +15,7 @@ class Circuit:
         self.tlines = {}
         self.bundles = {}
         self.geometries = {}
-
+        self.ybus = self.calc_ybus()
 
 
     def add_bus(self,bus,base_kv):
@@ -36,3 +36,8 @@ class Circuit:
     def add_geometry(self, name, xa, ya, xb, yb, xc, yc):
         self.geometries[name]=Geometry(name, xa, ya, xb, yb, xc, yc)
 
+
+    def calc_ybus(self):
+
+
+        return 0

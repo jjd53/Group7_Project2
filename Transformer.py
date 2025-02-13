@@ -1,5 +1,6 @@
 # Transformer.py
 from Bus import Bus
+import pandas as pd
 class Transformer:
     def __init__(self, name: str, bus1: Bus, bus2: Bus, power_rating: float, impedance_percent: float, x_over_r_ratio: float):
         self.name = name
@@ -31,4 +32,13 @@ class Transformer:
 
     def calc_yprim(self):
         y_series = 1 / self.zt if self.zt != 0 else complex('inf')
-        return [[y_series, -y_series], [-y_series, y_series]]
+
+        # Create a DataFrame with bus names as row and column labels
+        yprim = pd.DataFrame(
+            [[y_series, -y_series], [-y_series, y_series]],
+            index=[self.bus1.name, self.bus2.name],  # Row labels (bus names)
+            columns=[self.bus1.name, self.bus2.name]  # Column labels (bus names)
+        )
+
+        return yprim
+
