@@ -2,7 +2,7 @@
 from Bus import Bus
 import math
 class TransmissionLine:
-    def __init__(self, name: str, bus1: Bus, bus2: Bus, bundle, geometry, length: float, frequency=60):
+    def __init__(self, name: str, bus1: str, bus2: str, bundle, geometry, length: float, frequency=60):
         self.name = name
         self.bus1 = bus1
         self.bus2 = bus2
