@@ -44,6 +44,7 @@ class Transformer:
         Now uses `self.Yseries` instead of recalculating `1 / self.Zpu`.
         """
         Yprim_matrix = [[self.Yseries, -self.Yseries], [-self.Yseries, self.Yseries]]  # Primitive admittance matrix
+        self.YPrim_matrix = Yprim_matrix
 
         # Bus names as row and column labels
         bus_labels = [self.bus1.name, self.bus2.name]
