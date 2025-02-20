@@ -42,4 +42,5 @@ class TransmissionLine:
         Computes the primitive admittance matrix in per-unit.
         """
         Yprim_matrix = [[self.Yseries + (self.Bpu / 2), -self.Yseries], [-self.Yseries, self.Yseries + (self.Bpu / 2)]]
+        self.YPrim_matrix = Yprim_matrix
         return pd.DataFrame(Yprim_matrix, index=[self.bus1.name, self.bus2.name], columns=[self.bus1.name, self.bus2.name])
