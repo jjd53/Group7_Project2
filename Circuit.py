@@ -1,7 +1,7 @@
 from Bus import Bus
 from Conductor import Conductor
-from Transformer import Transformer
-from TransmissionLine import TransmissionLine
+from Transformer_PUS import Transformer
+from TransmissionLine_PUS import TransmissionLine
 from Bundle import Bundle
 from Geometry import Geometry
 
