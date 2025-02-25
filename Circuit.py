@@ -18,8 +18,8 @@ class Circuit:
         self.ybus = self.calc_ybus()
 
 
-    def add_bus(self,bus,base_kv):
-        self.buses[bus]=Bus(bus,base_kv)
+    def add_bus(self,bus,base_kv,bus_type:str, vpu = 1.0,delta = 0.0):
+        self.buses[bus]=Bus(bus,base_kv, bus_type, vpu, delta)
 
     def add_conductor(self, name, diam, GMR, resistance, ampacity):
         self.conductors[name] = Conductor(name, diam, GMR, resistance, ampacity)
