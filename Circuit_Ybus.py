@@ -19,8 +19,9 @@ class Circuit_Ybus:
         self.ybus = None  
 
     # Add Bus
-    def add_bus(self, name, base_kv):
-        self.buses[name] = Bus(name, base_kv)
+
+    def add_bus(self, bus, base_kv, bus_type: str, vpu=1.0, delta=0.0):
+        self.buses[bus] = Bus(bus, base_kv, bus_type, vpu, delta)
 
     # Add Conductor
     def add_conductor(self, name, diam, GMR, resistance, ampacity):

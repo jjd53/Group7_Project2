@@ -1,7 +1,7 @@
-from Circuit import Circuit
+from Circuit_Ybus import Circuit_Ybus
 from Settings import Settings
 
-network = Circuit("network")
+network = Circuit_Ybus("network")
 
 settings=Settings()
 
