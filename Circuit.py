@@ -4,6 +4,8 @@ from Transformer_PUS import Transformer
 from TransmissionLine_PUS import TransmissionLine
 from Bundle import Bundle
 from Geometry import Geometry
+import numpy as np
+import pandas as pd
 
 class Circuit:
 
@@ -36,8 +38,37 @@ class Circuit:
     def add_geometry(self, name, xa, ya, xb, yb, xc, yc):
         self.geometries[name]=Geometry(name, xa, ya, xb, yb, xc, yc)
 
-
     def calc_ybus(self):
+        """ Constructs the Ybus matrix by summing Yprim matrices of transformers and transmission lines """
+        num_buses = len(self.buses)
+        bus_names = list(self.buses.keys())
 
+        # Initialize an empty Ybus matrix
+        Ybus_matrix = np.zeros((num_buses, num_buses), dtype=complex)
 
-        return 0
+        # Process transformers
+        for transformer in self.transformers.values():
+            yprim = transformer.YPrim_matrix.values
+            i = bus_names.index(transformer.bus1.name)
+            j = bus_names.index(transformer.bus2.name)
+
+            # Add admittances to Ybus
+            Ybus_matrix[i, i] += yprim[0, 0]
+            Ybus_matrix[i, j] += yprim[0, 1]
+            Ybus_matrix[j, i] += yprim[1, 0]
+            Ybus_matrix[j, j] += yprim[1, 1]
+
+        # Process transmission lines
+        for line in self.tlines.values():
+            yprim = line.YPrim_matrix.values
+            i = bus_names.index(line.bus1.name)
+            j = bus_names.index(line.bus2.name)
+
+            # Add admittances to Ybus
+            Ybus_matrix[i, i] += yprim[0, 0]
+            Ybus_matrix[i, j] += yprim[0, 1]
+            Ybus_matrix[j, i] += yprim[1, 0]
+            Ybus_matrix[j, j] += yprim[1, 1]
+
+        # Store final Ybus matrix
+        self.ybus = pd.DataFrame(Ybus_matrix, index=bus_names, columns=bus_names)
