@@ -19,6 +19,7 @@ class Circuit_Ybus:
         self.bundles = {}
         self.geometries = {}
         self.ybus = None  # Will be computed later
+        self.calc_ybus()
 
 
     def add_bus(self, name, base_kv):

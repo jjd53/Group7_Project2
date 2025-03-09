@@ -12,10 +12,11 @@ class TransmissionLine:
         self.length = length  # Length in miles
         self.frequency = frequency
 
+
         # Compute per-unit parameters
         self.Rpu, self.Xpu, self.Bpu = self.calc_impedance()
         self.Yseries = self.calc_admittance()
-
+        self.calc_yprim()
     def calc_impedance(self):
         """
         Converts impedance and admittance to per-unit values.
@@ -25,7 +26,8 @@ class TransmissionLine:
         b_shunt = 2 * math.pi * self.frequency * (2 * math.pi * 8.854e-12) * math.log(self.geometry.Deq / self.bundle.DSC) * 1609.34  # Shunt Admittance
 
         # Convert to per-unit
-        base_impedance = (self.bus1.base_kv ** 2) / 100  # Base Impedance using 100 MVA base
+        #base_impedance = (self.bus1.base_kv ** 2) / 100  # Base Impedance using 100 MVA base
+        base_impedance = (240 ** 2) / 100  # Base Impedance using 100 MVA base
         Rpu = (r_series * self.length) / base_impedance
         Xpu = (x_series * self.length) / base_impedance
         Bpu = (b_shunt * self.length) * base_impedance  # Shunt Susceptance in per-unit
@@ -43,4 +45,4 @@ class TransmissionLine:
         """
         Yprim_matrix = [[self.Yseries + (self.Bpu / 2), -self.Yseries], [-self.Yseries, self.Yseries + (self.Bpu / 2)]]
         self.YPrim_matrix = Yprim_matrix
-        return pd.DataFrame(Yprim_matrix, index=[self.bus1.name, self.bus2.name], columns=[self.bus1.name, self.bus2.name])
+        #return pd.DataFrame(Yprim_matrix, index=[self.bus1.name, self.bus2.name], columns=[self.bus1.name, self.bus2.name])

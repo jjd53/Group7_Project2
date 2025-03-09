@@ -17,7 +17,7 @@ class Circuit:
         self.tlines = {}
         self.bundles = {}
         self.geometries = {}
-        self.ybus = self.calc_ybus()
+
 
 
     def add_bus(self,bus,base_kv,bus_type:str, vpu = 1.0,delta = 0.0):

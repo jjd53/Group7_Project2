@@ -30,3 +30,5 @@ network.add_tline("L6","bus4", "bus5","Bundle 1", "Geometry 1", 35, settings.fre
 
 
 print(network.__dict__)
+network.calc_ybus()
+print(network.ybus)

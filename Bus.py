@@ -4,7 +4,7 @@ class Bus:
 
     VALID_BUS_TYPES = ["Slack Bus", "PQ Bus", "PV Bus"]
 
-    def __init__(self, name: str, base_kv: float, bus_type:str, vpu = 1.0,delta = 0.0):
+    def __init__(self, name: str, base_kv: float,bus_type:str, vpu = 1.0,delta = 0.0):
         self.name = name
         self.base_kv = base_kv
         self.bus_type = bus_type
