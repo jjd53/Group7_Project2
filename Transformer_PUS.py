@@ -24,10 +24,15 @@ class Transformer:
         """
         Converts transformer impedance to per-unit values.
         """
-        base_impedance = (self.bus1.base_kv ** 2) / self.power_rating  # Base Impedance in PU
-        Zpu = (self.impedance_percent / 100) * base_impedance  # Per-Unit Impedance
-        Rpu = Zpu / ((1 + (self.x_over_r_ratio ** 2)) ** 0.5)  # Per-Unit Resistance
-        Xpu = Rpu * self.x_over_r_ratio  # Per-Unit Reactance
+        # base_impedance = (self.bus1.base_kv ** 2) / self.power_rating  # Base Impedance in PU
+        # Zpu = (self.impedance_percent / 100) * 100/self.power_rating  # Per-Unit Impedance
+        # Rpu = Zpu / ((1 + (self.x_over_r_ratio ** 2)) ** 0.5)  # Per-Unit Resistance
+        # Xpu = Rpu * self.x_over_r_ratio  # Per-Unit Reactance
+        self.zt = self.impedance_percent / 100 * 100 / self.power_rating * np.exp(1j * np.arctan(self.x_over_r_ratio))
+        Rpu = self.zt.real
+        Xpu = self.zt.imag
+
+
         return Rpu, Xpu  # Returns both values
 
     def calc_admittance(self):

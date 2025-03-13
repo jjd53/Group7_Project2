@@ -27,7 +27,7 @@ class TransmissionLine:
 
         # Convert to per-unit
         #base_impedance = (self.bus1.base_kv ** 2) / 100  # Base Impedance using 100 MVA base
-        base_impedance = (240 ** 2) / 100  # Base Impedance using 100 MVA base
+        base_impedance = (230 ** 2) / 100  # Base Impedance using 100 MVA base
         Rpu = (r_series * self.length) / base_impedance
         Xpu = (x_series * self.length) / base_impedance
         Bpu = (b_shunt * self.length) * base_impedance  # Shunt Susceptance in per-unit

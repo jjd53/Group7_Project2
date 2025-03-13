@@ -48,7 +48,7 @@ class Circuit:
 
         # Process transformers
         for transformer in self.transformers.values():
-            yprim = transformer.YPrim_matrix.values
+            yprim = np.array(transformer.YPrim_matrix)
             i = bus_names.index(transformer.bus1.name)
             j = bus_names.index(transformer.bus2.name)
 
@@ -60,9 +60,9 @@ class Circuit:
 
         # Process transmission lines
         for line in self.tlines.values():
-            yprim = line.YPrim_matrix.values
-            i = bus_names.index(line.bus1.name)
-            j = bus_names.index(line.bus2.name)
+            yprim = np.array(line.YPrim_matrix)
+            i = bus_names.index(line.bus1)
+            j = bus_names.index(line.bus2)
 
             # Add admittances to Ybus
             Ybus_matrix[i, i] += yprim[0, 0]

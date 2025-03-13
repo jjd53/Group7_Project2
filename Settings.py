@@ -6,4 +6,4 @@ class Settings:
         self.frequency = frequency
         self.base_power = base_power
 
-        
+
