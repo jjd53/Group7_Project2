@@ -9,7 +9,7 @@ class Bundle:
 
     def calcradii(self):
 
-        rc = self.conductor.diam/2
+        rc = self.conductor.diam/24
         GMRc = self.conductor.GMR
         d = self.spacing
 

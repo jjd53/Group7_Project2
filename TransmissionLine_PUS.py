@@ -23,7 +23,7 @@ class TransmissionLine:
         """
         r_series = self.bundle.conductor.resistance / self.bundle.num_conductors  # Resistance per mile
         x_series = 2 * math.pi * self.frequency * 2e-7 * math.log(self.geometry.Deq / self.bundle.DSL) * 1609.34  # Reactance
-        b_shunt = 2 * math.pi * self.frequency * (2 * math.pi * 8.854e-12) * math.log(self.geometry.Deq / self.bundle.DSC) * 1609.34  # Shunt Admittance
+        b_shunt = 2 * math.pi * self.frequency * (2 * math.pi * 8.854e-12) / math.log(self.geometry.Deq / self.bundle.DSC) * 1609.34  # Shunt Admittance
 
         # Convert to per-unit
         #base_impedance = (self.bus1.base_kv ** 2) / 100  # Base Impedance using 100 MVA base

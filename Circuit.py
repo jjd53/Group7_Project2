@@ -4,8 +4,11 @@ from Transformer_PUS import Transformer
 from TransmissionLine_PUS import TransmissionLine
 from Bundle import Bundle
 from Geometry import Geometry
+from Settings import Settings
 import numpy as np
 import pandas as pd
+
+
 
 class Circuit:
 
@@ -17,6 +20,7 @@ class Circuit:
         self.tlines = {}
         self.bundles = {}
         self.geometries = {}
+        self.settings = Settings()
 
 
 
