@@ -2,6 +2,8 @@ from Bus import Bus
 from Conductor import Conductor
 from Transformer_PUS import Transformer
 from TransmissionLine_PUS import TransmissionLine
+from Generator import Generator
+from Load import Load
 from Bundle import Bundle
 from Geometry import Geometry
 from Settings import Settings
@@ -20,7 +22,9 @@ class Circuit:
         self.tlines = {}
         self.bundles = {}
         self.geometries = {}
-        self.settings = Settings()
+        self.generators = {}
+        self.loads = {}
+
 
 
     def add_bus(self,bus,base_kv,bus_type:str, vpu = 1.0,delta = 0.0):
@@ -40,6 +44,12 @@ class Circuit:
 
     def add_geometry(self, name, xa, ya, xb, yb, xc, yc):
         self.geometries[name]=Geometry(name, xa, ya, xb, yb, xc, yc)
+
+    def add_generator(self, name, bus, voltage_setpoint, mw_setpoint):
+        self.generators[name] = Generator(name, bus, voltage_setpoint, mw_setpoint)
+
+    def add_load(self, name, bus, real_power, reactive_power):
+        self.loads[name] = Load(name, bus, real_power, reactive_power)
 
     def calc_ybus(self):
         """ Constructs the Ybus matrix by summing Yprim matrices of transformers and transmission lines """

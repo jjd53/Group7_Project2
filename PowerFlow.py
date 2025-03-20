@@ -39,7 +39,7 @@ class PowerFlow:
             power_injections[i] = self.voltages[i] * np.sum(self.ybus[i, :] * np.conj(self.voltages))
         return power_injections
 
-    def compute_power_mismatch(self)
+    def compute_power_mismatch(self):
         power_injections = self.compute_power_injection()
         mismatch = np.zeros(len(self.circuit.buses) * 2 - 1)  # Excluding slack bus ΔQ
 

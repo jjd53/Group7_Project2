@@ -7,3 +7,4 @@ class Settings:
         self.base_power = base_power
 
 
+
