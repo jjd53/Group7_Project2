@@ -25,7 +25,7 @@ class Circuit:
         self.generators = {}
         self.loads = {}
 
-
+    s=Settings()
 
     def add_bus(self,bus,base_kv,bus_type:str, vpu = 1.0,delta = 0.0):
         self.buses[bus]=Bus(bus,base_kv, bus_type, vpu, delta)

@@ -8,7 +8,7 @@ class PowerFlow:
     def __init__(self, circuit: Circuit):
         self.circuit = circuit
         self.ybus = circuit.ybus.values
-        self.Sbase = circuit.settings.base_power
+        self.Sbase = circuit.s.base_power
 
         self.v_magnitude = np.ones(len(self.circuit.buses))
         self.v_angle = np.zeros(len(self.circuit.buses))  # in radians
@@ -17,13 +17,16 @@ class PowerFlow:
 
     def _initialize_specified_power(self):
         specified_power = np.zeros(len(self.circuit.buses), dtype=complex)
+
         for i, bus in enumerate(self.circuit.buses.values()):
-            if bus.name in self.circuit.generators:
-                gen = self.circuit.generators[bus.name]
-                specified_power[i] += complex(gen.mw_setpoint, 0) / self.Sbase
-            if bus.name in self.circuit.loads:
-                load = self.circuit.loads[bus.name]
-                specified_power[i] -= complex(load.real_power, load.reactive_power) / self.Sbase
+            for gn in self.circuit.generators:
+                if self.circuit.generators[gn].bus == bus.name:
+                    gen = self.circuit.generators[gn]
+                    specified_power[i] += complex(gen.mw_setpoint, 0) / self.Sbase
+            for ld in self.circuit.loads:
+                if self.circuit.loads[ld].bus == bus.name:
+                    load = self.circuit.loads[ld]
+                    specified_power[i] -= complex(load.real_power, load.reactive_power) / self.Sbase
         return specified_power
 
     def compute_power_injection(self):
