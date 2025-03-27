@@ -32,14 +32,14 @@ class PowerFlow:
     def compute_power_injection(self):
         P = np.zeros(len(self.circuit.buses))
         Q = np.zeros(len(self.circuit.buses))
-        G = self.ybus.real
-        B = self.ybus.imag
+        yabs = np.abs(self.ybus)
+        yangle = np.angle(self.ybus)
 
         for i in range(len(self.circuit.buses)):
             for j in range(len(self.circuit.buses)):
                 angle_diff = self.v_angle[i] - self.v_angle[j]
-                P[i] += self.v_magnitude[i] * self.v_magnitude[j] * (G[i, j] * np.cos(angle_diff) + B[i, j] * np.sin(angle_diff))
-                Q[i] += self.v_magnitude[i] * self.v_magnitude[j] * (G[i, j] * np.sin(angle_diff) - B[i, j] * np.cos(angle_diff))
+                Q[i] += self.v_magnitude[i] * self.v_magnitude[j] * yabs[i,j] * np.sin(angle_diff - yangle[i,j])
+                P[i] += self.v_magnitude[i] * self.v_magnitude[j] * yabs[i,j] * np.cos(angle_diff - yangle[i,j])
         return P, Q
 
     def compute_power_mismatch(self):
