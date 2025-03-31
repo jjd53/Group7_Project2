@@ -7,8 +7,9 @@ class Jacobian:
         self.ybus = ybus  # Admittance matrix (numpy array)
 
     def calc_jacobian(self, angles, voltages):
-        PQ_buses = [bus for bus in self.buses if bus.type == 'PQ']
-        PV_buses = [bus for bus in self.buses if bus.type == 'PV']
+        PQ_buses = [bus for bus in self.buses if bus.bus_type == 'PQ']
+        PV_buses = [bus for bus in self.buses if bus.bus_type == 'PV']
+
         all_buses = PQ_buses + PV_buses
 
         n = len(self.buses)

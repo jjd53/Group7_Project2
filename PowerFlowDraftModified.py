@@ -21,7 +21,7 @@ class PowerFlow:
             for ld in self.circuit.loads:
                 if self.circuit.loads[ld].bus == bus.name:
                     load = self.circuit.loads[ld]
-                    self.specified_power[i] += complex(load.real_power, load.reactive_power) / self.Sbase
+                    self.specified_power[i] += complex(-load.real_power, -load.reactive_power) / self.Sbase
 
     # def compute_power_injection(self):
     #     self.P = np.zeros(len(self.circuit.buses))
