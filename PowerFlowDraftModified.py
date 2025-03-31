@@ -10,10 +10,6 @@ class PowerFlow:
         self.v_angle = np.zeros(len(self.circuit.buses))  # in radians
 
 
-
-
-
-
     def _initialize_specified_power(self):
         self.specified_power = np.zeros(len(self.circuit.buses), dtype=complex)
 
@@ -25,7 +21,7 @@ class PowerFlow:
             for ld in self.circuit.loads:
                 if self.circuit.loads[ld].bus == bus.name:
                     load = self.circuit.loads[ld]
-                    self.specified_power[i] += complex(-load.real_power, -load.reactive_power) / self.Sbase
+                    self.specified_power[i] += complex(load.real_power, load.reactive_power) / self.Sbase
 
     # def compute_power_injection(self):
     #     self.P = np.zeros(len(self.circuit.buses))
@@ -58,24 +54,40 @@ class PowerFlow:
         idx = 0
         for i, bus in enumerate(self.circuit.buses.values()):
             if bus.bus_type == "Slack Bus":
+                idx += 1
                 continue
-            self.mismatch[idx] = self.specified_power[i].real - self.P[i]
+            self.mismatch[idx + len(self.circuit.buses)] = self.specified_power[i].imag - self.Q[i]
 
             if bus.bus_type == "PQ Bus":
-                self.mismatch[idx+len(self.circuit.buses)] = self.specified_power[i].imag - self.Q[i]
+                self.mismatch[idx] = self.specified_power[i].real - self.P[i]
+
             idx += 1
 
+
+    # def compute_power_mismatch(self):
+    #
+    #     self.mismatch = np.zeros(len(self.circuit.buses) * 2)
+    #
+    #     idx = 0
+    #     for i, bus in enumerate(self.circuit.buses.values()):
+    #         if bus.bus_type == "Slack Bus":
+    #             continue
+    #         self.mismatch[idx] = self.specified_power[i].real - self.P[i]
+    #
+    #         if bus.bus_type == "PQ Bus":
+    #             self.mismatch[idx+len(self.circuit.buses)] = self.specified_power[i].imag - self.Q[i]
+    #         idx += 1
 
     def run_power_flow(self):
         self._initialize_specified_power()
         self.compute_power_injection()
         self.compute_power_mismatch()
 
-        print("\nPower Injections at Each Bus:")
-        print("Bus\tP_inj (p.u.)\tQ_inj (p.u.)")
-        print("-" * 40)
-        for i, (bus_name, bus) in enumerate(self.circuit.buses.items()):
-            print(f"{bus_name}\t{self.P[i]:.4f}\t\t{self.Q[i]:.4f}")
+        # print("\nPower Injections at Each Bus:")
+        # print("Bus\tP_inj (p.u.)\tQ_inj (p.u.)")
+        # print("-" * 40)
+        # for i, (bus_name, bus) in enumerate(self.circuit.buses.items()):
+        #     print(f"{bus_name}\t{self.P[i]:.4f}\t\t{self.Q[i]:.4f}")
 
         print("Updated Computed Power Injection (P):", self.P)
         print("Updated Computed Power Injection (Q):", self.Q)
