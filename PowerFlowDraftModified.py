@@ -6,8 +6,8 @@ class PowerFlow:
         self.circuit = circuit
         self.ybus = circuit.ybus.values
         self.Sbase = circuit.s.base_power
-        self.v_magnitude = np.ones(len(self.circuit.buses))
-        self.v_angle = np.zeros(len(self.circuit.buses))  # in radians
+        self.v_magnitude = [1,0.9369,0.92047,0.92978,0.92671,0.93966,0.99999]
+        self.v_angle = [0,-0.0776035,-0.094169,-0.0821253,-0.0844165,-0.0690142,0.0375055]  # in radians
 
 
     def _initialize_specified_power(self):
@@ -46,7 +46,8 @@ class PowerFlow:
                 Pu = self.v_magnitude[i] * self.v_magnitude[j] * yabs[i,j] * np.cos(angle_diff)
                 self.Q[i] += Qu
                 self.P[i] += Pu
-
+                if i == 1 or i == 2:
+                    print(" bus= ", i+1, " j= ", j," Q= ", Qu," P= ", Pu)
     def compute_power_mismatch(self):
 
         self.mismatch = np.zeros(len(self.circuit.buses) * 2)
@@ -88,7 +89,7 @@ class PowerFlow:
         # print("-" * 40)
         # for i, (bus_name, bus) in enumerate(self.circuit.buses.items()):
         #     print(f"{bus_name}\t{self.P[i]:.4f}\t\t{self.Q[i]:.4f}")
-
+        print(self.specified_power)
         print("Updated Computed Power Injection (P):", self.P)
         print("Updated Computed Power Injection (Q):", self.Q)
         print("Updated Mismatch Vector:", self.mismatch)
@@ -104,7 +105,7 @@ class PowerFlow:
         #     print(f"Bus {bus.name}: \u0394P = {dP:.4f} p.u., \u0394Q = {dQ:.4f} p.u.")
 
 
-if __name__ == "__main__":
-    from Network import network
-    pf = PowerFlow(network)
-    pf.run_power_flow()
+# if __name__ == "__main__":
+#     from Network import network
+#     pf = PowerFlow(network)
+#     pf.run_power_flow()
