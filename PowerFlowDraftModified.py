@@ -6,8 +6,8 @@ class PowerFlow:
         self.circuit = circuit
         self.ybus = circuit.ybus.values
         self.Sbase = circuit.s.base_power
-        self.v_magnitude = [1,0.9369,0.92047,0.92978,0.92671,0.93966,0.99999]
-        self.v_angle = [0,-0.0776035,-0.094169,-0.0821253,-0.0844165,-0.0690142,0.0375055]  # in radians
+        self.v_magnitude = np.ones(len(self.circuit.buses))
+        self.v_angle = np.zeros(len(self.circuit.buses))  # in radians
 
 
     def _initialize_specified_power(self):
@@ -46,24 +46,29 @@ class PowerFlow:
                 Pu = self.v_magnitude[i] * self.v_magnitude[j] * yabs[i,j] * np.cos(angle_diff)
                 self.Q[i] += Qu
                 self.P[i] += Pu
-                if i == 1 or i == 2:
-                    print(" bus= ", i+1, " j= ", j," Q= ", Qu," P= ", Pu)
+                # if i == 1 or i == 2:
+                #     print(" bus= ", i+1, " j= ", j," Q= ", Qu," P= ", Pu)
     def compute_power_mismatch(self):
 
-        self.mismatch = np.zeros(len(self.circuit.buses) * 2)
+        self.mismatch = np.ones(11)
 
         idx = 0
         for i, bus in enumerate(self.circuit.buses.values()):
             if bus.bus_type == "Slack Bus":
-                idx += 1
+                #idx += 1
                 continue
-            self.mismatch[idx + len(self.circuit.buses)] = self.specified_power[i].imag - self.Q[i]
-
-            if bus.bus_type == "PQ Bus":
-                self.mismatch[idx] = self.specified_power[i].real - self.P[i]
-
+            self.mismatch[idx] = self.specified_power[i].real - self.P[i]
             idx += 1
 
+        idx = 0
+        for i, bus in enumerate(self.circuit.buses.values()):
+            if bus.bus_type == "Slack Bus":
+                # idx += 1
+                continue
+            if bus.bus_type == "PQ Bus":
+                self.mismatch[idx + 6] = self.specified_power[i].imag - self.Q[i]
+            idx += 1
+        print(len(self.mismatch))
 
     # def compute_power_mismatch(self):
     #

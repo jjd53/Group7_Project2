@@ -1,6 +1,7 @@
 from Circuit import Circuit
 from Settings import Settings
 from PowerFlowDraftModified import PowerFlow
+from Jacobian import Jacobian
 
 network = Circuit("network")
 
@@ -37,8 +38,14 @@ network.add_load("Lb5","bus5",100,65)
 
 network.calc_ybus()
 #network.ybus.to_csv("ybus.csv")
+
 #print(network.ybus)
-# print(network.ybus)
 pf = PowerFlow(network)
 pf.run_power_flow()
+jac=Jacobian(pf.circuit.buses,pf.ybus)
+jac.calc_jacobian(pf.v_angle,pf.v_magnitude)
+jac.newton_raphson(pf.mismatch,pf.v_angle,pf.v_magnitude)
+
+
+
 #print(pf.mismatch*100)

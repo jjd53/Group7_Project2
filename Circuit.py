@@ -85,3 +85,4 @@ class Circuit:
 
         # Store final Ybus matrix
         self.ybus = pd.DataFrame(Ybus_matrix, index=bus_names, columns=bus_names)
+        print(Ybus_matrix)

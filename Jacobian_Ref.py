@@ -77,6 +77,6 @@ class Jacobian:
         # Stack to form full Jacobian
         top = np.hstack((J1, J2))
         bottom = np.hstack((J3, J4))
-        J = np.vstack((top, bottom))
+        self.J = np.vstack((top, bottom))
 
-        return J
+
