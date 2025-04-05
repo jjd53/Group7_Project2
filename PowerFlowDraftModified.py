@@ -8,7 +8,8 @@ class PowerFlow:
         self.Sbase = circuit.s.base_power
         self.v_magnitude = np.ones(len(self.circuit.buses))
         self.v_angle = np.zeros(len(self.circuit.buses))  # in radians
-
+        #self.v_magnitude = [1,0.9369,0.92047,0.92978,0.92671,0.93966,0.99999]
+        #self.v_angle = [0,-0.0776035,-0.0954169,-0.0821253,-0.0844165,-0.0690142,0.0375055]
 
     def _initialize_specified_power(self):
         self.specified_power = np.zeros(len(self.circuit.buses), dtype=complex)
@@ -68,7 +69,7 @@ class PowerFlow:
             if bus.bus_type == "PQ Bus":
                 self.mismatch[idx + 6] = self.specified_power[i].imag - self.Q[i]
             idx += 1
-        print(len(self.mismatch))
+        #print(len(self.mismatch))
 
     # def compute_power_mismatch(self):
     #
@@ -94,7 +95,7 @@ class PowerFlow:
         # print("-" * 40)
         # for i, (bus_name, bus) in enumerate(self.circuit.buses.items()):
         #     print(f"{bus_name}\t{self.P[i]:.4f}\t\t{self.Q[i]:.4f}")
-        print(self.specified_power)
+        #print(self.specified_power)
         print("Updated Computed Power Injection (P):", self.P)
         print("Updated Computed Power Injection (Q):", self.Q)
         print("Updated Mismatch Vector:", self.mismatch)
