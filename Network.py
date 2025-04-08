@@ -42,9 +42,9 @@ network.calc_ybus()
 #print(network.ybus)
 pf = PowerFlow(network)
 pf.run_power_flow()
-# jac=Jacobian(pf.circuit.buses,pf.ybus)
-# jac.calc_jacobian(pf.v_angle,pf.v_magnitude)
-# jac.newton_raphson(pf.mismatch,pf.v_angle,pf.v_magnitude)
+jac=Jacobian(pf.circuit.buses,pf.ybus)
+jac.calc_jacobian(pf.v_angle,pf.v_magnitude)
+jac.newton_raphson(pf.mismatch,pf.v_angle,pf.v_magnitude)
 
 
 
