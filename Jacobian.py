@@ -16,9 +16,9 @@ class Jacobian:
         m = 2 * len(PQ_buses) + len(PV_buses)  # Adjusted size of the Jacobian
 
         J1 = self.compute_J1(all_buses, angles, voltages)
-        J2 = self.compute_J2(PQ_buses + PV_buses, angles, voltages)
-        J3 = self.compute_J3(PQ_buses, angles, voltages)
-        J4 = self.compute_J4(PQ_buses, angles, voltages)
+        J2 = self.compute_J2(all_buses, angles, voltages)
+        J3 = self.compute_J3(all_buses, angles, voltages)
+        J4 = self.compute_J4(all_buses, angles, voltages)
 
         J_top = np.hstack((J1, J2))
         J_bottom = np.hstack((J3, J4))
