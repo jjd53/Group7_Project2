@@ -127,6 +127,6 @@ class Jacobian:
                 print(f'✅ Converged in {iteration + 1} iterations.')
                 return angles, voltages
 
-        print('❌ Did not converge within max iterations.')
+        print('Did not converge within max iterations.')
         return angles, voltages
 
