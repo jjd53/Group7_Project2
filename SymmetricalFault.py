@@ -8,15 +8,9 @@ class SymmetricalFaultAnalyzer:
         self.zbus = None
 
     def _convert_generator_reactance_to_system_base(self, gen_reactance, gen_base_MVA, system_base_MVA):
-        """
-        Converts generator subtransient reactance to system base.
-        """
         return gen_reactance * (system_base_MVA / gen_base_MVA)
 
     def _add_generator_subtransient_admittance(self):
-        """
-        Adds generator subtransient admittances to the diagonal of Ybus.
-        """
         for gen_name, gen in self.circuit.generators.items():
             if hasattr(gen, 'x_double_prime'):
                 x_pp_system = self._convert_generator_reactance_to_system_base(
@@ -30,18 +24,12 @@ class SymmetricalFaultAnalyzer:
                     raise ValueError(f"Bus {gen.bus} for generator {gen.name} not found in Ybus.")
 
     def calculate_zbus(self):
-        """
-        Inverts Ybus to get Zbus.
-        """
         self._add_generator_subtransient_admittance()
         self.zbus = pd.DataFrame(np.linalg.inv(self.ybus.values), 
                                  index=self.ybus.index, columns=self.ybus.columns)
         return self.zbus
 
     def calculate_fault_current(self, faulted_bus, pre_fault_voltage=1.0):
-        """
-        Calculates the subtransient fault current for a bolted three-phase fault.
-        """
         if self.zbus is None:
             self.calculate_zbus()
 
@@ -66,9 +54,8 @@ class SymmetricalFaultAnalyzer:
 
 # Example Usage
 if __name__ == "__main__":
-    from Network import network  # Assumes network has been built as in Network.py
+    from Network import network  
 
-    # Set generator subtransient reactance (in generator base MVA)
     network.generators["G1"].x_double_prime = 0.2  # Typical example values
     network.generators["G1"].base_MVA = 100
     network.generators["G2"].x_double_prime = 0.2
