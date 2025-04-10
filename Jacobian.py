@@ -16,9 +16,9 @@ class Jacobian:
         m = 2 * len(PQ_buses) + len(PV_buses)  # Adjusted size of the Jacobian
 
         J1 = self.compute_J1(all_buses, angles, voltages)
-        J2 = self.compute_J2(all_buses, angles, voltages)
-        J3 = self.compute_J3(all_buses, angles, voltages)
-        J4 = self.compute_J4(all_buses, angles, voltages)
+        J2 = self.compute_J2(PQ_buses + PV_buses, angles, voltages)
+        J3 = self.compute_J3(PQ_buses, angles, voltages)
+        J4 = self.compute_J4(PQ_buses, angles, voltages)
 
         J_top = np.hstack((J1, J2))
         J_bottom = np.hstack((J3, J4))
@@ -98,24 +98,35 @@ class Jacobian:
         """Newton-Raphson method to solve power flow equations"""
         for iteration in range(max_iter):
             J = self.calc_jacobian(angles, voltages)
+            print(f"Iteration {iteration + 1}")
             print("Determinant:", np.linalg.det(J))
             print("Rank:", np.linalg.matrix_rank(J))
-            delta_X = np.linalg.solve(J, power_mismatch)
+
+            try:
+                delta_X = np.linalg.solve(J, power_mismatch)
+            except np.linalg.LinAlgError:
+                print("Jacobian is singular — using pseudo-inverse fallback.")
+                delta_X = np.linalg.pinv(J) @ power_mismatch
 
             # Update voltage angles and magnitudes
-            for i, bus in enumerate(self.buses):
-                if bus.type != 'Slack':
-                    angles[i] += delta_X[i]
-                    if bus.type == 'PQ':
-                        voltages[i] += delta_X[len(self.buses) - 1 + i]
+            angle_idx = 0
+            volt_idx = 0
+            for i, bus in enumerate(self.buses.values()):
+                if bus.bus_type != 'Slack':
+                    angles[i] += delta_X[angle_idx]
+                    angle_idx += 1
+                    if bus.bus_type == 'PQ Bus':
+                        voltages[i] += delta_X[len(self.buses) - 1 + volt_idx]
+                        volt_idx += 1
 
             # Recalculate power mismatch
-            power_mismatch = self.calculate_power_mismatch(angles, voltages)
+            #power_mismatch = self.calculate_power_mismatch(angles, voltages)
 
             # Check for convergence
             if np.linalg.norm(power_mismatch, np.inf) < tol:
-                print(f'Converged in {iteration + 1} iterations.')
+                print(f'✅ Converged in {iteration + 1} iterations.')
                 return angles, voltages
 
-        print('Did not converge within max iterations.')
+        print('❌ Did not converge within max iterations.')
         return angles, voltages
+
