@@ -1,5 +1,6 @@
 import numpy as np
-
+from PowerFlowDraftModified import PowerFlow
+import Network
 
 class Jacobian:
     def __init__(self, buses, ybus):
@@ -94,7 +95,7 @@ class Jacobian:
                     J4[i, j] = -abs(self.ybus[i, j]) * voltages[j] * np.sin(angles[i] - angles[j])
         return J4
 
-    def newton_raphson(self, power_mismatch, angles, voltages, tol=1e-3, max_iter=10):
+    def newton_raphson(self, power_mismatch, angles, voltages, tol=1e-3, max_iter=50):
         """Newton-Raphson method to solve power flow equations"""
         for iteration in range(max_iter):
             J = self.calc_jacobian(angles, voltages)
@@ -120,11 +121,11 @@ class Jacobian:
                         volt_idx += 1
 
             # Recalculate power mismatch
-            #power_mismatch = self.calculate_power_mismatch(angles, voltages)
+            #PowerFlow.compute_power_mismatch(Network.pf.)
 
             # Check for convergence
             if np.linalg.norm(power_mismatch, np.inf) < tol:
-                print(f'✅ Converged in {iteration + 1} iterations.')
+                print(f'Converged in {iteration + 1} iterations.')
                 return angles, voltages
 
         print('Did not converge within max iterations.')

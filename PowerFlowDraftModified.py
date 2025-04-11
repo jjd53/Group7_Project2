@@ -6,10 +6,13 @@ class PowerFlow:
         self.circuit = circuit
         self.ybus = circuit.ybus.values
         self.Sbase = circuit.s.base_power
-        # self.v_magnitude = np.ones(len(self.circuit.buses))
-        # self.v_angle = np.zeros(len(self.circuit.buses))  # in radians
+        #self.v_magnitude = np.ones(len(self.circuit.buses))
+        #self.v_angle = np.zeros(len(self.circuit.buses))  # in radians
         self.v_magnitude = [1,0.9369,0.92047,0.92978,0.92671,0.93966,0.99999]
         self.v_angle = [0,-0.0776035,-0.0954169,-0.0821253,-0.0844165,-0.0690142,0.0375055]
+        self.mismatch = np.ones(11)
+        self.P = np.zeros(len(self.circuit.buses))
+        self.Q = np.zeros(len(self.circuit.buses))
 
     def _initialize_specified_power(self):
         self.specified_power = np.zeros(len(self.circuit.buses), dtype=complex)
@@ -35,8 +38,7 @@ class PowerFlow:
     #     self.Q = S_injected.imag
 
     def compute_power_injection(self):
-        self.P = np.zeros(len(self.circuit.buses))
-        self.Q = np.zeros(len(self.circuit.buses))
+
         yabs = np.abs(self.ybus)
         yangle = np.angle(self.ybus)
 
@@ -51,7 +53,7 @@ class PowerFlow:
                 #     print(" bus= ", i+1, " j= ", j," Q= ", Qu," P= ", Pu)
     def compute_power_mismatch(self):
 
-        self.mismatch = np.ones(11)
+
 
         idx = 0
         for i, bus in enumerate(self.circuit.buses.values()):
