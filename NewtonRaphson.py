@@ -9,6 +9,7 @@ class NewtonRaphsonSolver:
         self.jacobian = Jacobian(circuit.buses, circuit.ybus.values)
         self.max_iter = 50
         self.tol = 0.001
+        self.solve()
 
     def solve(self):
         self.power_flow._initialize_specified_power()
@@ -51,9 +52,9 @@ class NewtonRaphsonSolver:
         print(np.degrees(self.power_flow.v_angle).round(6))
 
 
-# Example usage
-if __name__ == "__main__":
-    from Network import network
-
-    solver = NewtonRaphsonSolver(network)
-    solver.solve()
+# # Example usage
+# if __name__ == "__main__":
+#     from Network import network
+#
+#     solver = NewtonRaphsonSolver(network)
+#     solver.solve()

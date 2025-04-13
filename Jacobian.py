@@ -1,6 +1,6 @@
 import numpy as np
 from PowerFlowDraftModified import PowerFlow
-import Network
+
 
 class Jacobian:
     def __init__(self, buses, ybus):
@@ -95,39 +95,41 @@ class Jacobian:
                     J4[i, j] = -abs(self.ybus[i, j]) * voltages[j] * np.sin(angles[i] - angles[j])
         return J4
 
-    def newton_raphson(self, power_mismatch, angles, voltages, tol=1e-3, max_iter=50):
-        """Newton-Raphson method to solve power flow equations"""
-        for iteration in range(max_iter):
-            J = self.calc_jacobian(angles, voltages)
-            print(f"Iteration {iteration + 1}")
-            print("Determinant:", np.linalg.det(J))
-            print("Rank:", np.linalg.matrix_rank(J))
-
-            try:
-                delta_X = np.linalg.solve(J, power_mismatch)
-            except np.linalg.LinAlgError:
-                print("Jacobian is singular — using pseudo-inverse fallback.")
-                delta_X = np.linalg.pinv(J) @ power_mismatch
-
-            # Update voltage angles and magnitudes
-            angle_idx = 0
-            volt_idx = 0
-            for i, bus in enumerate(self.buses.values()):
-                if bus.bus_type != 'Slack':
-                    angles[i] += delta_X[angle_idx]
-                    angle_idx += 1
-                    if bus.bus_type == 'PQ Bus':
-                        voltages[i] += delta_X[len(self.buses) - 1 + volt_idx]
-                        volt_idx += 1
-
-            # Recalculate power mismatch
-            #PowerFlow.compute_power_mismatch(Network.pf.)
-
-            # Check for convergence
-            if np.linalg.norm(power_mismatch, np.inf) < tol:
-                print(f'Converged in {iteration + 1} iterations.')
-                return angles, voltages
-
-        print('Did not converge within max iterations.')
-        return angles, voltages
+    # def newton_raphson(self, power_mismatch, angles, voltages, tol=1e-3, max_iter=50):
+    #     """Newton-Raphson method to solve power flow equations"""
+    #     for iteration in range(max_iter):
+    #         J = self.calc_jacobian(angles, voltages)
+    #         print(f"Iteration {iteration + 1}")
+    #         print("Determinant:", np.linalg.det(J))
+    #         print("Rank:", np.linalg.matrix_rank(J))
+    #
+    #         try:
+    #             delta_X = np.linalg.solve(J, power_mismatch)
+    #         except np.linalg.LinAlgError:
+    #             print("Jacobian is singular — using pseudo-inverse fallback.")
+    #             delta_X = np.linalg.pinv(J) @ power_mismatch
+    #
+    #         # Update voltage angles and magnitudes
+    #         angle_idx = 0
+    #         volt_idx = 0
+    #         for i, bus in enumerate(self.buses.values()):
+    #             if bus.bus_type != 'Slack':
+    #                 angles[i] += delta_X[angle_idx]
+    #                 angle_idx += 1
+    #                 if bus.bus_type == 'PQ Bus':
+    #                     voltages[i] += delta_X[len(self.buses) - 1 + volt_idx]
+    #                     volt_idx += 1
+    #         self.angles = angles
+    #         self.voltages = voltages
+    #
+    #         # Recalculate power mismatch
+    #         PowerFlow.compute_power_mismatch()
+    #
+    #         # Check for convergence
+    #         if np.linalg.norm(power_mismatch, np.inf) < tol:
+    #             print(f'Converged in {iteration + 1} iterations.')
+    #             return angles, voltages
+    #
+    #     print('Did not converge within max iterations.')
+    #     return angles, voltages
 
