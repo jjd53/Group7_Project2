@@ -22,6 +22,7 @@ class NewtonRaphsonSolver:
             print(f"\nIteration {iteration+1}")
             print("Max mismatch:", np.max(np.abs(mismatch)))
 
+
             if np.max(np.abs(mismatch)) < self.tol:
                 print("Converged!")
                 break
@@ -44,6 +45,7 @@ class NewtonRaphsonSolver:
                     if bus.bus_type == "PQ Bus":
                         self.power_flow.v_magnitude[i] += delta_X[len(self.circuit.buses) - 1 + volt_idx]
                         volt_idx += 1
+
 
         print("\nFinal Voltage Magnitudes:")
         print(self.power_flow.v_magnitude.round(6))

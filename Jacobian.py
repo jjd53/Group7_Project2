@@ -35,13 +35,15 @@ class Jacobian:
         all_buses = PQ_buses + PV_buses
 
         J1 = np.zeros((len(all_buses), len(all_buses)))
-        for i, bus_i in enumerate(all_buses):
-            for j, bus_j in enumerate(all_buses):
-                if i == j:
-                    J1[i, j] = -sum(abs(self.ybus[i, k]) * voltages[k] * np.sin(angles[i] - angles[k])
+        for p, bus_i in enumerate(all_buses):
+            i = list(self.buses.values()).index(bus_i)
+            for q, bus_j in enumerate(all_buses):
+                j = list(self.buses.values()).index(bus_j)
+                if p == q:
+                    J1[p, q] = -voltages[i]*sum(abs(self.ybus[i, k]) * voltages[k] * np.sin(angles[i] - angles[k]- np.angle(self.ybus[i,k]))
                                     for k in range(len(self.buses)) if k != i)
                 else:
-                    J1[i, j] = abs(self.ybus[i, j]) * voltages[i] * voltages[j] * np.sin(angles[i] - angles[j])
+                    J1[p, q] = abs(self.ybus[i, j]) * voltages[i] * voltages[j] * np.sin(angles[i] - angles[j] - np.angle(self.ybus[i,j]))
         return J1
 
     def compute_J2(self, buses, angles, voltages):
@@ -52,13 +54,15 @@ class Jacobian:
 
         """Computes J2 (dP/dV)"""
         J2 = np.zeros((len(all_buses), len(PQ_buses)))
-        for i, bus_i in enumerate(all_buses):
-            for j, bus_j in enumerate(PQ_buses):
-                if i == j:
-                    J2[i, j] = sum(abs(self.ybus[i, k]) * voltages[k] * np.cos(angles[i] - angles[k])
+        for p, bus_i in enumerate(all_buses):
+            i = list(self.buses.values()).index(bus_i)
+            for q, bus_j in enumerate(PQ_buses):
+                j = list(self.buses.values()).index(bus_j)
+                if p == q:
+                    J2[p, q] = voltages[i]*abs(self.ybus[i,i])*np.cos(np.angle(self.ybus[i,i]))+sum(abs(self.ybus[i, k]) * voltages[k] * np.cos(angles[i] - angles[k]- np.angle(self.ybus[i,k]))
                                    for k in range(len(self.buses)))
                 else:
-                    J2[i, j] = abs(self.ybus[i, j]) * voltages[j] * np.cos(angles[i] - angles[j])
+                    J2[p, q] = abs(self.ybus[i, j]) * voltages[i] * np.cos(angles[i] - angles[j]- np.angle(self.ybus[i,j]))
         return J2
 
     def compute_J3(self, buses, angles, voltages):
@@ -69,13 +73,15 @@ class Jacobian:
 
         """Computes J3 (dQ/dδ)"""
         J3 = np.zeros((len(PQ_buses), len(all_buses)))
-        for i, bus_i in enumerate(PQ_buses):
-            for j, bus_j in enumerate(all_buses):
-                if i == j:
-                    J3[i, j] = sum(abs(self.ybus[i, k]) * voltages[k] * np.cos(angles[i] - angles[k])
+        for p, bus_i in enumerate(PQ_buses):
+            i = list(self.buses.values()).index(bus_i)
+            for q, bus_j in enumerate(all_buses):
+                j = list(self.buses.values()).index(bus_j)
+                if p == q:
+                    J3[p, q] = voltages[i]*sum(abs(self.ybus[i, k]) * voltages[k] * np.cos(angles[i] - angles[k]- np.angle(self.ybus[i,k]))
                                    for k in range(len(self.buses)) if k != i)
                 else:
-                    J3[i, j] = -abs(self.ybus[i, j]) * voltages[i] * voltages[j] * np.cos(angles[i] - angles[j])
+                    J3[p, q] = -abs(self.ybus[i, j]) * voltages[i] * voltages[j] * np.cos(angles[i] - angles[j]- np.angle(self.ybus[i,j]))
         return J3
 
     def compute_J4(self, buses, angles, voltages):
@@ -86,13 +92,15 @@ class Jacobian:
 
         """Computes J4 (dQ/dV)"""
         J4 = np.zeros((len(PQ_buses), len(PQ_buses)))
-        for i, bus_i in enumerate(PQ_buses):
-            for j, bus_j in enumerate(PQ_buses):
-                if i == j:
-                    J4[i, j] = -sum(abs(self.ybus[i, k]) * voltages[k] * np.sin(angles[i] - angles[k])
+        for p, bus_i in enumerate(PQ_buses):
+            i = list(self.buses.values()).index(bus_i)
+            for q, bus_j in enumerate(PQ_buses):
+                j = list(self.buses.values()).index(bus_j)
+                if p == q:
+                    J4[p, q] = -voltages[i]*abs(self.ybus[i,i])*np.sin(np.angle(self.ybus[i,i]))+sum(abs(self.ybus[i, k]) * voltages[k] * np.sin(angles[i] - angles[k]- np.angle(self.ybus[i,k]))
                                     for k in range(len(self.buses)))
                 else:
-                    J4[i, j] = -abs(self.ybus[i, j]) * voltages[j] * np.sin(angles[i] - angles[j])
+                    J4[p, q] = abs(self.ybus[i, j]) * voltages[i] * np.sin(angles[i] - angles[j]- np.angle(self.ybus[i,j]))
         return J4
 
     # def newton_raphson(self, power_mismatch, angles, voltages, tol=1e-3, max_iter=50):

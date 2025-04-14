@@ -30,7 +30,7 @@ class TransmissionLine:
         base_impedance = (230 ** 2) / 100  # Base Impedance using 100 MVA base
         Rpu = (r_series * self.length) / base_impedance
         Xpu = (x_series * self.length) / base_impedance
-        Bpu = (b_shunt * self.length) / base_impedance  # Shunt Susceptance in per-unit
+        Bpu = (b_shunt * self.length) * base_impedance  # Shunt Susceptance in per-unit
         return Rpu, Xpu, Bpu
 
     def calc_admittance(self):
@@ -43,6 +43,6 @@ class TransmissionLine:
         """
         Computes the primitive admittance matrix in per-unit.
         """
-        Yprim_matrix = [[self.Yseries + (self.Bpu / 2), -self.Yseries], [-self.Yseries, self.Yseries + (self.Bpu / 2)]]
+        Yprim_matrix = [[self.Yseries + (self.Bpu *1j / 2), -self.Yseries], [-self.Yseries, self.Yseries + (self.Bpu *1j / 2)]]
         self.YPrim_matrix = Yprim_matrix
         #return pd.DataFrame(Yprim_matrix, index=[self.bus1.name, self.bus2.name], columns=[self.bus1.name, self.bus2.name])
