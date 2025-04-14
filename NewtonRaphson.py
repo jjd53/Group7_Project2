@@ -20,6 +20,7 @@ class NewtonRaphsonSolver:
             mismatch = self.power_flow.mismatch
 
             print(f"\nIteration {iteration+1}")
+            print("Mismatch: ", mismatch)
             print("Max mismatch:", np.max(np.abs(mismatch)))
 
 
@@ -28,12 +29,14 @@ class NewtonRaphsonSolver:
                 break
 
             J = self.jacobian.calc_jacobian(self.power_flow.v_angle, self.power_flow.v_magnitude)
+            print("Jacobian: ", J)
 
             try:
                 delta_X = np.linalg.solve(J, mismatch)
             except np.linalg.LinAlgError:
                 delta_X = np.linalg.pinv(J) @ mismatch
                 print("Jacobian singular, used pseudo-inverse.")
+
 
             angle_idx = 0
             volt_idx = 0
@@ -45,7 +48,8 @@ class NewtonRaphsonSolver:
                     if bus.bus_type == "PQ Bus":
                         self.power_flow.v_magnitude[i] += delta_X[len(self.circuit.buses) - 1 + volt_idx]
                         volt_idx += 1
-
+            print("angle: ", np.degrees(self.power_flow.v_angle))
+            print("magnitude: ", self.power_flow.v_magnitude)
 
         print("\nFinal Voltage Magnitudes:")
         print(self.power_flow.v_magnitude.round(6))
