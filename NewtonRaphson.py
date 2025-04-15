@@ -52,10 +52,10 @@ class NewtonRaphsonSolver:
             print("magnitude: ", self.power_flow.v_magnitude)
 
         print("\nFinal Voltage Magnitudes:")
-        print(self.power_flow.v_magnitude.round(6))
+        print(self.power_flow.v_magnitude)
 
         print("\nFinal Voltage Angles (degrees):")
-        print(np.degrees(self.power_flow.v_angle).round(6))
+        print(np.degrees(self.power_flow.v_angle))
 
 
 # # Example usage
