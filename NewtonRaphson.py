@@ -45,9 +45,12 @@ class NewtonRaphsonSolver:
                 if bus.bus_type != "Slack Bus":
                     self.power_flow.v_angle[i] += delta_X[angle_idx]
                     angle_idx += 1
-                    if bus.bus_type == "PQ Bus":
-                        self.power_flow.v_magnitude[i] += delta_X[len(self.circuit.buses) - 1 + volt_idx]
-                        volt_idx += 1
+
+            for i, bus in enumerate(self.circuit.buses.values()):
+
+                if bus.bus_type == "PQ Bus":
+                    self.power_flow.v_magnitude[i] += delta_X[len(self.circuit.buses) - 1 + volt_idx]
+                    volt_idx += 1
             print("angle: ", np.degrees(self.power_flow.v_angle))
             print("magnitude: ", self.power_flow.v_magnitude)
 
