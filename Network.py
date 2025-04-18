@@ -3,6 +3,7 @@ from Settings import Settings
 from PowerFlowDraftModified import PowerFlow
 from Jacobian import Jacobian
 from NewtonRaphson import NewtonRaphsonSolver
+from Fault import Fault
 
 network = Circuit("network")
 
@@ -30,8 +31,8 @@ network.add_tline("L4","bus4", "bus6","Bundle 1", "Geometry 1", 20, network.s.fr
 network.add_tline("L5","bus5", "bus6","Bundle 1", "Geometry 1", 10, network.s.frequency)
 network.add_tline("L6","bus4", "bus5","Bundle 1", "Geometry 1", 35, network.s.frequency)
 
-network.add_generator("G1","bus1",1,0)
-network.add_generator("G2","bus7",1,200)
+network.add_generator("G1","bus1",0.12,1,0)
+network.add_generator("G2","bus7",0.12,1,200)
 
 network.add_load("Lb3","bus3",110,50)
 network.add_load("Lb4","bus4",100,70)
@@ -41,7 +42,10 @@ network.calc_ybus()
 #network.ybus.to_csv("ybus.csv")
 
 #print(network.ybus)
-NewtonRaphsonSolver(network)
+
+#NewtonRaphsonSolver(network)
+
+Fault(network,3)
 
 
 # pf = PowerFlow(network)

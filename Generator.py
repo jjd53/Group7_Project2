@@ -3,10 +3,11 @@
 class Generator:
 
 
-    def __init__(self, name, bus, voltage_setpoint=1.0, mw_setpoint=0.0):
+    def __init__(self, name, bus, Xsub, voltage_setpoint=1.0, mw_setpoint=0.0):
 
         self.name = name
         self.bus = bus
+        self.Xsub = Xsub
         self.voltage_setpoint = voltage_setpoint
         self.mw_setpoint = mw_setpoint
 
