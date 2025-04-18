@@ -16,6 +16,8 @@ class NewtonRaphsonSolver:
 
         for iteration in range(self.max_iter):
             self.power_flow.compute_power_injection()
+            P,Q = self.power_flow.P,self.power_flow.Q
+
             self.power_flow.compute_power_mismatch()
             mismatch = self.power_flow.mismatch
 
@@ -49,7 +51,7 @@ class NewtonRaphsonSolver:
             for i, bus in enumerate(self.circuit.buses.values()):
 
                 if bus.bus_type == "PQ Bus":
-                    self.power_flow.v_magnitude[i] += delta_X[len(self.circuit.buses) - 1 + volt_idx]
+                    self.power_flow.v_magnitude[i] += delta_X[angle_idx+volt_idx]
                     volt_idx += 1
             print("angle: ", np.degrees(self.power_flow.v_angle))
             print("magnitude: ", self.power_flow.v_magnitude)
