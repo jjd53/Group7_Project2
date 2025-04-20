@@ -16,8 +16,8 @@ network.add_bus("bus5", 230, "PQ Bus")
 network.add_bus("bus6", 230, "PQ Bus")
 network.add_bus("bus7", 18, "PV Bus")
 
-network.add_transformer("T1","bus1", "bus2", 125, 8.5, 10)
-network.add_transformer("T2","bus6","bus7", 200, 10.5, 12)
+network.add_transformer("T1","bus1", "bus2", 125, 8.5, 10,"D-Y",1)
+network.add_transformer("T2","bus6","bus7", 200, 10.5, 12, "D-Y", 1e15)
 
 network.add_conductor("Partridge", 0.642, 0.0217, 0.385, 460)
 network.add_bundle("Bundle 1", 2, 1.5, "Partridge")
@@ -31,8 +31,8 @@ network.add_tline("L4","bus4", "bus6","Bundle 1", "Geometry 1", 20, network.s.fr
 network.add_tline("L5","bus5", "bus6","Bundle 1", "Geometry 1", 10, network.s.frequency)
 network.add_tline("L6","bus4", "bus5","Bundle 1", "Geometry 1", 35, network.s.frequency)
 
-network.add_generator("G1","bus1",0.12,1,0)
-network.add_generator("G2","bus7",0.12,1,200)
+network.add_generator("G1","bus1",0.12, 0.14, 0.05,0, True,1,0)
+network.add_generator("G2","bus7",0.12,0.14, 0.05,1,True,1,200)
 
 network.add_load("Lb3","bus3",110,50)
 network.add_load("Lb4","bus4",100,70)
@@ -45,7 +45,7 @@ network.calc_ybus()
 
 #NewtonRaphsonSolver(network)
 
-Fault(network,3)
+Fault(network,2,"3phase")
 
 
 # pf = PowerFlow(network)

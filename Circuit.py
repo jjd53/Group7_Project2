@@ -33,8 +33,8 @@ class Circuit:
     def add_conductor(self, name, diam, GMR, resistance, ampacity):
         self.conductors[name] = Conductor(name, diam, GMR, resistance, ampacity)
 
-    def add_transformer(self, name, bus1, bus2, power_rating, impedance_percent, x_over_r_ratio):
-        self.transformers[name] = Transformer(name, self.buses[bus1], self.buses[bus2], power_rating, impedance_percent, x_over_r_ratio)
+    def add_transformer(self, name, bus1, bus2, power_rating, impedance_percent, x_over_r_ratio, connection, Zg):
+        self.transformers[name] = Transformer(name, self.buses[bus1], self.buses[bus2], power_rating, impedance_percent, x_over_r_ratio, connection, Zg)
 
     def add_tline(self, name: str, bus1: str, bus2: str, bundle, geometry, length: float, frequency=60):
         self.tlines[name] = TransmissionLine(name, bus1, bus2, self.bundles[bundle], self.geometries[geometry], length, frequency)
@@ -45,8 +45,8 @@ class Circuit:
     def add_geometry(self, name, xa, ya, xb, yb, xc, yc):
         self.geometries[name]=Geometry(name, xa, ya, xb, yb, xc, yc)
 
-    def add_generator(self, name, bus, Xsub, voltage_setpoint, mw_setpoint):
-        self.generators[name] = Generator(name, bus, Xsub, voltage_setpoint, mw_setpoint)
+    def add_generator(self, name, bus, Xsub, X2, X0, Zg, grounded,voltage_setpoint, mw_setpoint):
+        self.generators[name] = Generator(name, bus, Xsub, X2, X0, Zg,voltage_setpoint, mw_setpoint)
 
     def add_load(self, name, bus, real_power, reactive_power):
         self.loads[name] = Load(name, bus, real_power, reactive_power)

@@ -4,7 +4,7 @@ import numpy as np
 from Bus import Bus
 
 class Transformer:
-    def __init__(self, name: str, bus1: Bus, bus2: Bus, power_rating: float, impedance_percent: float, x_over_r_ratio: float):
+    def __init__(self, name: str, bus1: str, bus2: str, power_rating: float, impedance_percent: float, x_over_r_ratio: float, connection:str, Zg):
         """
         Initializes the Transformer object with per-unit calculations.
         """
@@ -14,12 +14,16 @@ class Transformer:
         self.power_rating = power_rating  # Transformer rated power in MVA
         self.impedance_percent = impedance_percent  # Transformer impedance in percentage
         self.x_over_r_ratio = x_over_r_ratio  # X/R ratio
+        self.connection = connection
+        self.Zg = Zg
 
         # Compute per-unit impedance
         self.Rpu, self.Xpu = self.calc_impedance()  # Per-unit resistance & reactance
         self.Yseries = self.calc_admittance()  # Per-unit admittance
         self.Yprim = self.calc_yprim()  # DataFrame with Bus Labels
 
+        self.Y1, self.Y2, self.Y0 = self.get_sequence_admittances()
+        self.calc_yprim_seq()
     def calc_impedance(self):
         """
         Converts transformer impedance to per-unit values.
@@ -54,6 +58,21 @@ class Transformer:
         # Bus names as row and column labels
         bus_labels = [self.bus1.name, self.bus2.name]
         return pd.DataFrame(Yprim_matrix, index=bus_labels, columns=bus_labels)
+
+    def get_sequence_admittances(self):
+
+        Y0 = 1 / (3 * self.Zg + 1j*self.zt) if self.Zg != 0 else 0
+        Y1 = 1 / (1j * self.zt)
+        Y2 = Y1
+        return Y1, Y2, Y0
+
+    def calc_yprim_seq(self):
+
+        self.yprim1 = [[self.Y1, -self.Y1], [-self.Y1, self.Y1]]
+        self.yprim2 = [[self.Y2, -self.Y2], [-self.Y2, self.Y2]]
+        self.yprim0 = [[self.Y0, -self.Y0], [-self.Y0, self.Y0]]
+
+
 
     def display_transformer_info(self):
         """
