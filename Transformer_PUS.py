@@ -4,7 +4,7 @@ import numpy as np
 from Bus import Bus
 
 class Transformer:
-    def __init__(self, name: str, bus1: str, bus2: str, power_rating: float, impedance_percent: float, x_over_r_ratio: float, connection:str, Zg):
+    def __init__(self, name: str, bus1: Bus, bus2: Bus, power_rating: float, impedance_percent: float, x_over_r_ratio: float, connection:str, Zg):
         """
         Initializes the Transformer object with per-unit calculations.
         """
