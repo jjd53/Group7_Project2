@@ -61,8 +61,8 @@ class Transformer:
 
     def get_sequence_admittances(self):
 
-        Y0 = 1 / (3 * self.Zg + 1j*self.zt) if self.Zg != 0 else 0
-        Y1 = 1 / (1j * self.zt)
+        Y0 = 1 / (1j*self.Zg + self.zt) if self.Zg != 0 else 0
+        Y1 = 1 / (self.zt)
         Y2 = Y1
         return Y1, Y2, Y0
 

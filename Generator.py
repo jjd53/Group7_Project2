@@ -21,7 +21,7 @@ class Generator:
         Y1 = 1 / (1j * self.Xsub)
         Y2 = 1 / (1j * self.X2)
         if self.grounded:
-            Y0 = 1 / (1j * self.X0 + 3 * self.Zg)
+            Y0 = 1 / (1j * self.X0 +  self.Zg)
         else:
             Y0 = 0
         return Y1, Y2, Y0
