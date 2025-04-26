@@ -4,7 +4,7 @@ import pandas as pd
 
 class Fault:
 
-    def __init__(self, circuit, bus, type:str):
+    def __init__(self, circuit, bus, type:str,Zf):
         self.circuit = circuit
         self.Fbus = bus - 1
         self.type = type
@@ -12,14 +12,20 @@ class Fault:
         self.E = np.zeros(len(self.circuit.buses), dtype=complex)
         self.bus_names = list(self.circuit.buses.keys())
         self.ybus = self.circuit.ybus.to_numpy()
+        self.Zf = Zf
 
 
         self.Y1, self.Y2, self.Y0 = self.build_Yseq()
+        self.Z1, self.Z2, self.Z0 = self.seqZbus()
 
         if type == "3phase":
             self.thrph()
         if type == "ltg":
             self.ltg()
+        if type == "ltl":
+            self.ltl()
+        if type == "dltg":
+            self.dltg()
 
     def thrph(self):
         for generator in self.circuit.generators.values():
@@ -34,16 +40,29 @@ class Fault:
         self.If = self.Vf/self.Zbus[self.Fbus,self.Fbus]
         for k in range(len(self.circuit.buses)):
             self.E[k] = (1 - (self.Zbus[k,self.Fbus]/self.Zbus[self.Fbus,self.Fbus]))*self.Vf
-        self.Fprint()
+        self.SFprint()
 
     def ltg(self):
-        print("Yes")
+        i = self.Fbus
+        self.If1, self.If2, self.If0 = self.Vf/(self.Z0[i,i] + self.Z1[i,i] + self.Z2[i,i] + 3*self.Zf)
+
+        self.AFprint()
 
     def ltl(self):
-        return
+        i = self.Fbus
+        self.If1 = self.Vf / (self.Z0[i,i] + self.Z1[i,i] + self.Zf[i,i])
+        self.If2 = -self.If1
+        self.If0 = 0
+
+        self.AFprint()
 
     def dltg(self):
-        return
+        i = self.Fbus
+        self.If1 = self.Vf / ((self.Z1[i,i])+(self.Z2[i,i]*(self.Z0[i,i]+3*self.Zf))/(self.Z2[i,i]+self.Z0[i,i]+3*self.Zf))
+        self.If2 = -self.If1 * ((self.Z0[i,i]+3*self.Zf)/(self.Z0[i,i]+3*self.Zf)+self.Z2[i,i])
+        self.If0 = -self.If1 * ((self.Z2[i,i])/(self.Z0[i,i]+3*self.Zf+self.Z2[i,i]))
+
+        self.AFprint()
 
     def build_Yseq(self):
         num_buses = len(self.circuit.buses)
@@ -115,7 +134,21 @@ class Fault:
 
         return Y1, Y2, Y0
 
-    def Fprint(self):
+    def seqZbus(self):
+        Z1 = np.linalg.inv(self.Y1)
+        Z2 = np.linalg.inv(self.Y2)
+        Z0 = np.linalg.inv(self.Y0)
+        return Z1, Z2, Z0
+
+    def VkFn(self):
+        self.Vk = np.zeros((3,len(self.circuit.buses)),dtype=complex)
+        I_seq = np.array([self.If0, self.If1, self.If2])  # 1D array shape (3,)
+
+        for k in range(len(self.circuit.buses)):
+            Z_matrix = np.diag([self.Z0[k, self.Fbus], self.Z1[k, self.Fbus], self.Z2[k, self.Fbus]])  # 3x3 diagonal matrix
+            self.Vk[:, k] = np.array([0, self.Vf, 0], dtype=complex) - Z_matrix @ I_seq
+
+    def SFprint(self):
         print(f"{'Fault Current at Bus':<25} {self.Fbus-1}")
         print(f"{'Magnitude':<15}: {np.abs(self.If):.6f} p.u.")
         print(f"{'Angle':<15}: {np.degrees(np.angle(self.If)):.2f}°\n")
