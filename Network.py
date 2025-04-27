@@ -45,7 +45,7 @@ network.calc_ybus()
 
 #NewtonRaphsonSolver(network)
 
-Fault(network,2,"3phase",0)
+Fault(network,2,"dltg",0)
 
 
 # pf = PowerFlow(network)
