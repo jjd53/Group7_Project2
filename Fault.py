@@ -56,7 +56,7 @@ class Fault:
 
     def ltl(self):
         i = self.Fbus
-        self.If1 = self.Vf / (self.Z0[i,i] + self.Z1[i,i] + self.Zf)
+        self.If1 = self.Vf / (self.Z2[i,i] + self.Z1[i,i] + self.Zf)
         self.If2 = -self.If1
         self.If0 = 0
         self.VkFn()
