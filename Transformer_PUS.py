@@ -67,10 +67,10 @@ class Transformer:
         return Y1, Y2, Y0
 
     def calc_yprim_seq(self):
-
-        self.yprim1 = [[self.Y1, -self.Y1], [-self.Y1, self.Y1]]
-        self.yprim2 = [[self.Y2, -self.Y2], [-self.Y2, self.Y2]]
-        self.yprim0 = [[self.Y0, -self.Y0], [-self.Y0, self.Y0]]
+        if self.connection == "D-Y":
+            self.yprim1 = [[self.Y1, -self.Y1], [-self.Y1, self.Y1]]
+            self.yprim2 = [[self.Y2, -self.Y2], [-self.Y2, self.Y2]]
+            self.yprim0 = [[0, 0], [0, 0]]
 
 
 

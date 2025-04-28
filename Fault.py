@@ -27,9 +27,9 @@ class Fault:
         if type == "dltg":
             self.dltg()
 
-        self.print_complex_matrix(self.Y1, "Y1 Matrix")
-        self.print_complex_matrix(self.Y2, "Y2 Matrix")
-        self.print_complex_matrix(self.Y0, "Y0 Matrix")
+        # self.print_complex_matrix(self.Y1, "Y1 Matrix")
+        # self.print_complex_matrix(self.Y2, "Y2 Matrix")
+        # self.print_complex_matrix(self.Y0, "Y0 Matrix")
 
     def thrph(self):
         for generator in self.circuit.generators.values():
