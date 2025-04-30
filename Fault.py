@@ -167,7 +167,7 @@ class Fault:
         self.IphF = A @ self.I_seq
 
     def SFprint(self):
-        print(f"{'Fault Current at Bus':<25} {self.Fbus-1}")
+        print(f"{'Fault Current at Bus':<25} {self.Fbus+1}")
         print(f"{'Magnitude':<15}: {np.abs(self.If):.6f} p.u.")
         print(f"{'Angle':<15}: {np.degrees(np.angle(self.If)):.2f}°\n")
 
