@@ -46,7 +46,7 @@ class Circuit:
         self.geometries[name]=Geometry(name, xa, ya, xb, yb, xc, yc)
 
     def add_generator(self, name, bus, Xsub, X2, X0, Zg, grounded,voltage_setpoint, mw_setpoint):
-        self.generators[name] = Generator(name, bus, Xsub, X2, X0, Zg,voltage_setpoint, mw_setpoint)
+        self.generators[name] = Generator(name, bus, Xsub, X2, X0, Zg, grounded,voltage_setpoint, mw_setpoint)
 
     def add_load(self, name, bus, real_power, reactive_power):
         self.loads[name] = Load(name, bus, real_power, reactive_power)
