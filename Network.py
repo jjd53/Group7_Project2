@@ -38,14 +38,17 @@ network.add_load("Lb3","bus3",110,50)
 network.add_load("Lb4","bus4",100,70)
 network.add_load("Lb5","bus5",100,65)
 
+#network.add_PV("PV1", "bus4",20,0.65,0.95)
+#network.add_PV("PV2", "bus5",30,0.75,0.95)
+
 network.calc_ybus()
 #network.ybus.to_csv("ybus.csv")
 
 #print(network.ybus)
 
-#NewtonRaphsonSolver(network)
+NewtonRaphsonSolver(network)
 
-Fault(network,5,"3phase",0)
+#Fault(network,5,"3phase",0)
 
 
 # pf = PowerFlow(network)

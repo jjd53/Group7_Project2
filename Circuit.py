@@ -4,6 +4,7 @@ from Transformer_PUS import Transformer
 from TransmissionLine_PUS import TransmissionLine
 from Generator import Generator
 from Load import Load
+from PV_System import PV_System
 from Bundle import Bundle
 from Geometry import Geometry
 from Settings import Settings
@@ -23,7 +24,9 @@ class Circuit:
         self.bundles = {}
         self.geometries = {}
         self.generators = {}
+        self.PVs = {}
         self.loads = {}
+
 
     s=Settings()
 
@@ -50,6 +53,13 @@ class Circuit:
 
     def add_load(self, name, bus, real_power, reactive_power):
         self.loads[name] = Load(name, bus, real_power, reactive_power)
+
+    def add_PV(self, name, bus, P, RI, eff):
+        self.PVs[name] = PV_System(name, bus, P, RI, eff)
+        self.PV_load(name, bus)
+
+    def PV_load(self, name, bus):
+        self.add_load(name, bus, self.PVs[name].power_gen, 0)
 
     def calc_ybus(self):
         """ Constructs the Ybus matrix by summing Yprim matrices of transformers and transmission lines """
